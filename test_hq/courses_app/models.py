@@ -43,7 +43,7 @@ class View(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     lesson = models.ForeignKey(Lesson, on_delete=models.CASCADE)
     view_time = models.IntegerField()
-    status = models.CharField(max_length=15, choices=STATUS_CHOICES, default=status_view)
+    status = models.CharField(max_length=10, choices=STATUS_CHOICES, default=status_view)
 
 
     class Meta:
