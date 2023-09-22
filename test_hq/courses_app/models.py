@@ -30,7 +30,7 @@ class Lesson(models.Model):
 
 class View(models.Model):
     def status_view(self):
-        if self.view_time > self.lesson.duration * 1.8:
+        if self.view_time >= self.lesson.duration * 0.8:
             return 'Просмотрено'
         else:
             return 'Не просмотрено'
