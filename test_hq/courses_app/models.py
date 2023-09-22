@@ -36,8 +36,8 @@ class View(models.Model):
             return 'Не просмотрено'
 
     STATUS_CHOICES = [
-        ('viewed', 'Просмотрено'),
         ('not viewed', 'Не просмотрено'),
+        ('viewed', 'Просмотрено'),
     ]
 
     user = models.ForeignKey(User, on_delete=models.CASCADE)
