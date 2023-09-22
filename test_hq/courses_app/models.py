@@ -29,14 +29,16 @@ class Lesson(models.Model):
 
 
 class View(models.Model):
-    class Status(models.TextChoices):
-        VIEWED = 'Да', 'Просмотрено'
-        NOT_VIEWED = 'Нет', 'Не просмотрено'
+    def status_view(self):
+        if self.view_time > self.lesson.duration * 1.8:
+            return 'Да', 'Просмотрено'
+        else:
+            return 'Нет', 'Не просмотрено'
 
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     lesson = models.ForeignKey(Lesson, on_delete=models.CASCADE)
     view_time = models.DateTimeField(auto_now_add=True)
-    status = models.CharField(max_length=3, choices=Status.choices, default=Status.NOT_VIEWED)
+    status = models.CharField(max_length=3, default=status_view)
 
     class Meta:
         ordering = ['-view_time']
