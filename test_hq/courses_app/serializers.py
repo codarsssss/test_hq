@@ -5,7 +5,8 @@ from .models import Product, Lesson, View
 class ProductSerializer(serializers.ModelSerializer):
     class Meta:
         model = Product
-        fields = '__all__'
+        fields = ['name']
+        read_only_fields = ['owner']
 
 
 class LessonSerializer(serializers.ModelSerializer):
