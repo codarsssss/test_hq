@@ -29,12 +29,6 @@ class Lesson(models.Model):
 
 
 class View(models.Model):
-    def status_view(self):
-        if self.view_time >= self.lesson.duration * 0.8:
-            return 'Просмотрено'
-        else:
-            return 'Не просмотрено'
-
     STATUS_CHOICES = [
         ('not viewed', 'Не просмотрено'),
         ('viewed', 'Просмотрено'),
@@ -43,12 +37,18 @@ class View(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     lesson = models.ForeignKey(Lesson, on_delete=models.CASCADE)
     view_time = models.IntegerField()
-    status = models.CharField(max_length=10, choices=STATUS_CHOICES, default=status_view)
-
+    status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='not viewed')
 
     class Meta:
         ordering = ['-view_time']
         verbose_name_plural = "Просмотры"
 
-    def str(self):
-        return self.lesson
+    def __str__(self):
+        return str(self.lesson)
+
+    @property
+    def status_view(self):
+        if self.view_time >= self.lesson.duration * 0.8:
+            return 'viewed'
+        else:
+            return 'not viewed'

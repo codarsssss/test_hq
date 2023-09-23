@@ -21,6 +21,15 @@ class LessonSerializer(serializers.ModelSerializer):
 
 
 class ViewSerializer(serializers.ModelSerializer):
+    lesson = serializers.PrimaryKeyRelatedField(queryset=Lesson.objects.all())
+
     class Meta:
         model = View
-        fields = '__all__'
+        fields = ['lesson', 'view_time']
+
+    def create(self, validated_data):
+        user = self.context['request'].user  # Получаем текущего пользователя
+        lesson_pk = validated_data.pop('lesson').id
+        view = View.objects.create(user=user, lesson_id=lesson_pk, **validated_data)
+        return view
+
