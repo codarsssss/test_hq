@@ -3,6 +3,10 @@ from .models import Product, Lesson, View
 from .serializers import ProductSerializer, LessonSerializer, ViewSerializer, CreateViewSerializer
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.exceptions import ValidationError
+from rest_framework.response import Response
+from rest_framework.views import APIView
+from django.db.models import Sum
+from django.contrib.auth.models import User
 
 
 class ProductViewSet(viewsets.ModelViewSet):
@@ -45,3 +49,23 @@ class ViewViewSet(viewsets.ModelViewSet):
         view = View.objects.create(user=user, lesson=lesson, view_time=view_time)
 
         serializer.instance = view
+
+
+class ProductStatsAPIView(APIView):
+    def get(self, request):
+        products = Product.objects.all()
+        stats = []
+        for product in products:
+            views_count = View.objects.filter(lesson__product=product).count()
+            total_view_time = View.objects.filter(lesson__product=product).aggregate(Sum('view_time'))['view_time__sum']
+            students_count = len([product.owner])
+            access_percentage = students_count / User.objects.count() * 100
+            stats.append({
+                'product': product.name,
+                'views_count': views_count,
+                'total_view_time': total_view_time,
+                'students_count': students_count,
+                'access_percentage': access_percentage
+            })
+        return Response(stats)
+

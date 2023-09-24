@@ -10,14 +10,14 @@ class ProductSerializer(serializers.ModelSerializer):
 
 
 class LessonSerializer(serializers.ModelSerializer):
-    products = serializers.SlugRelatedField(
+    product = serializers.SlugRelatedField(
         queryset=Product.objects.all(),
         slug_field='name'
     )
 
     class Meta:
         model = Lesson
-        fields = ['name', 'video_link', 'duration', 'products']
+        fields = ['name', 'video_link', 'duration', 'product']
 
 
 class CreateViewSerializer(serializers.ModelSerializer):

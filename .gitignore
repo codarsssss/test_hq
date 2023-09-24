@@ -158,5 +158,6 @@ cython_debug/
 #  and can be added to the global gitignore or merged into this file.  For a more nuclear
 #  option (not recommended) you can uncomment the following to ignore the entire idea folder.
 .idea/
-/test_hq/courses_app/migrations/*
-/test_hq/authentication_app/migrations/*
+/courses_app/migrations/*
+/authentication_app/migrations/*
+
