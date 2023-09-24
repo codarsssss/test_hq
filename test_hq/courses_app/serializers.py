@@ -20,16 +20,28 @@ class LessonSerializer(serializers.ModelSerializer):
         fields = ['name', 'video_link', 'duration', 'products']
 
 
-class ViewSerializer(serializers.ModelSerializer):
-    lesson = serializers.PrimaryKeyRelatedField(queryset=Lesson.objects.all())
-
+class CreateViewSerializer(serializers.ModelSerializer):
     class Meta:
         model = View
         fields = ['lesson', 'view_time']
 
-    def create(self, validated_data):
-        user = self.context['request'].user  # Получаем текущего пользователя
-        lesson_pk = validated_data.pop('lesson').id
-        view = View.objects.create(user=user, lesson_id=lesson_pk, **validated_data)
+    def save(self, **kwargs):
+        user = self.context['request'].user
+        view = View.objects.create(user=user, **self.validated_data)
         return view
+
+
+class ViewSerializer(serializers.ModelSerializer):
+    lesson = LessonSerializer()
+    status = serializers.SerializerMethodField(source='status')
+
+    class Meta:
+        model = View
+        fields = ['user', 'lesson', 'view_time', 'status']
+
+    def get_status(self, obj):
+        if obj.view_time >= obj.lesson.duration * 0.8:
+            return 'viewed'
+        else:
+            return 'not viewed'
 

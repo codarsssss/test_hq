@@ -10,7 +10,7 @@ class Product(models.Model):
         ordering = ['owner']
         verbose_name_plural = "Продукт"
 
-    def str(self):
+    def __str__(self):
         return self.name
 
 
@@ -24,7 +24,7 @@ class Lesson(models.Model):
         ordering = ['name']
         verbose_name_plural = "Уроки"
 
-    def str(self):
+    def __str__(self):
         return self.name
 
 
@@ -46,7 +46,6 @@ class View(models.Model):
     def __str__(self):
         return str(self.lesson)
 
-    @property
     def status_view(self):
         if self.view_time >= self.lesson.duration * 0.8:
             return 'viewed'
