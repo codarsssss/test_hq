@@ -4,7 +4,6 @@ from .serializers import ProductSerializer, LessonSerializer, ViewSerializer, Cr
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.exceptions import ValidationError
 from rest_framework.response import Response
-from rest_framework.views import APIView
 from django.db.models import Sum
 from django.contrib.auth.models import User
 
@@ -51,8 +50,8 @@ class ViewViewSet(viewsets.ModelViewSet):
         serializer.instance = view
 
 
-class ProductStatsAPIView(APIView):
-    def get(self, request):
+class ProductStatsAPIView(viewsets.ViewSet):
+    def list(self, request):
         products = Product.objects.all()
         stats = []
         for product in products:
