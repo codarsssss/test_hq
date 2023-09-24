@@ -47,6 +47,7 @@ class View(models.Model):
         return str(self.lesson)
 
     def status_view(self):
+        # Определяем статус просмотра на основе времени просмотра и продолжительности урока
         if self.view_time >= self.lesson.duration * 0.8:
             return 'viewed'
         else:

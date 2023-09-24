@@ -21,9 +21,20 @@ class LessonSerializer(serializers.ModelSerializer):
 
 
 class CreateViewSerializer(serializers.ModelSerializer):
+    lesson_name = serializers.CharField(write_only=True)
+
     class Meta:
         model = View
-        fields = ['lesson', 'view_time']
+        fields = ['lesson_name', 'view_time']
+
+    def validate(self, attrs):
+        lesson_name = attrs.get('lesson_name')
+        try:
+            lesson = Lesson.objects.get(name=lesson_name)
+        except Lesson.DoesNotExist:
+            raise serializers.ValidationError("Урок с указанным именем не существует.")
+        attrs['lesson'] = lesson
+        return attrs
 
     def save(self, **kwargs):
         user = self.context['request'].user
@@ -44,4 +55,3 @@ class ViewSerializer(serializers.ModelSerializer):
             return 'viewed'
         else:
             return 'not viewed'
-
